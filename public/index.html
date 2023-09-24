@@ -82,7 +82,7 @@
 
         }
         const mapalldata = mapData()
-        console.log(mapalldata)
+        // console.log(mapalldata)
 
         function convertToGeoJSON(data) {
             const geojson = {
@@ -123,9 +123,9 @@
             // console.log(geojsonString)
             const storedData = JSON.parse(geojsonString);
             createFeatures(storedData)
-            let i = 0;
-
-            localStorage.setItem(i, geojsonString)
+            // let i = 0;
+            console.log(storedData)
+            // localStorage.setItem(i, geojsonString)
             return geojson;
 
         }
