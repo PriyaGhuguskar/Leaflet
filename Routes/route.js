@@ -4,7 +4,7 @@ const router = express.Router();
 const { getAllData,
     postAllDta } = require('../controller/modelControl')
 // For all book on landing page
-router.get("/getall-data", getAllData)
+router.get("/getall", getAllData)
 
 // for create Book
 router.post("/", postAllDta)

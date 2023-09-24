@@ -24,53 +24,9 @@
 
 
     <script>
-        var map = L.map('map').setView([1.14949, 122.2940], 5);
-        // base layer
-        let street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        })
-
-
-        let topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-            attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
-        });
-        let googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
-            maxZoom: 20,
-            subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-        });
-
-        let baseMaps = {
-            "Street Map": street,
-            "googleHybrid": googleHybrid
-        };
-
-        googleHybrid.addTo(map);
-
-        function getMarkerRadius(mag) {
-            const scalingFactor = 5;
-
-            return (Math.sqrt(mag) * scalingFactor);
-        }
-        function getColor(mag) {
-            if (mag >= 10) {
-                return '#800000';
-            } else if (mag >= 8) {
-                return '#b22222';
-            } else if (mag >= 6) {
-                return '#DD2555';
-            } else if (mag >= 4) {
-                return '#ff4500';
-            } else if (mag >= 2) {
-                return '#ff6347';
-            } else if (mag >= 1) {
-                return '#f08080';
-            } else { return '#ffa07a' };
-        }
-
-
         async function mapData() {
             try {
-                const fetchUrl = await fetch('/getall-data')
+                const fetchUrl = await fetch('/getall')
                 const datas = await fetchUrl.json();
                 var geojsonData = await datas?.gempas;
                 convertToGeoJSON(geojsonData);
@@ -81,156 +37,213 @@
             }
 
         }
-        const mapalldata = mapData()
-        // console.log(mapalldata)
-
-        function convertToGeoJSON(data) {
-            const geojson = {
-                type: 'FeatureCollection',
-                features: []
-            };
-
-            data.forEach(item => {
-                let Time = item.Jam
-                let region = item.Wilayah
-                let magnitude = item.Magnitude
-                let lati = JSON.parse((item.Lintang).slice(0, 5))
-                let longi = JSON.parse((item.Bujur).slice(0, 5))
-                // localStorage.setItem(lati)
-                const feature = {
-                    type: 'Feature',
-                    geometry: {
-                        type: 'Point',
-                        coordinates: [longi, lati] // Assuming your data has latitude and longitude properties
-                    },
-                    properties: {
-                        // Add additional properties as needed
-                        DateTime: item.DateTime,
-                        date: item.Tanggal,
-                        time: item.Jam,
-                        region: item.Wilayah,
-                        address: item.Wilayah,
-                        description: item.Dirasakan,
-                        title: item.Dirasakan,
-                        magnit: magnitude,
-                    }
-
-                };
-
-                geojson.features.push(feature);
-            });
-            const geojsonString = JSON.stringify(geojson);
-            // console.log(geojsonString)
-            const storedData = JSON.parse(geojsonString);
-            createFeatures(storedData)
-            // let i = 0;
-            console.log(storedData)
-            // localStorage.setItem(i, geojsonString)
-            return geojson;
-
-        }
+        // var map = L.map('map').setView([1.14949, 122.2940], 5);
+        // // base layer
+        // let street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        // })
 
 
-        function createFeatures(storedData) {
+        // let topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+        //     attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+        // });
+        // let googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
+        //     maxZoom: 20,
+        //     subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+        // });
 
-            let earthquakes = L.geoJSON(storedData, {
-                pointToLayer: function (feature, latlng) {
-                    //Define  magnitude and place for circleMarker
-                    const magnitude = feature.properties.magnit;
-                    const place = feature.properties.region;
-                    const dateString = feature.properties.date;
-                    // var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                    const timeString = feature.properties.time;
+        // let baseMaps = {
+        //     "Street Map": street,
+        //     "googleHybrid": googleHybrid
+        // };
+
+        // googleHybrid.addTo(map);
+
+        // function getMarkerRadius(mag) {
+        //     const scalingFactor = 5;
+
+        //     return (Math.sqrt(mag) * scalingFactor);
+        // }
+        // function getColor(mag) {
+        //     if (mag >= 10) {
+        //         return '#800000';
+        //     } else if (mag >= 8) {
+        //         return '#b22222';
+        //     } else if (mag >= 6) {
+        //         return '#DD2555';
+        //     } else if (mag >= 4) {
+        //         return '#ff4500';
+        //     } else if (mag >= 2) {
+        //         return '#ff6347';
+        //     } else if (mag >= 1) {
+        //         return '#f08080';
+        //     } else { return '#ffa07a' };
+        // }
 
 
-                    const circleMarkerStyle = {
-                        radius: getMarkerRadius(magnitude),
-                        fillColor: getColor(magnitude),
-                        color: 'black',
-                        weight: 1,
-                        opacity: 1,
-                        fillOpacity: 0.75
-                    };
+        // async function mapData() {
+        //     try {
+        //         const fetchUrl = await fetch('/getall')
+        //         const datas = await fetchUrl.json();
+        //         var geojsonData = await datas?.gempas;
+        //         convertToGeoJSON(geojsonData);
+        //         return geojsonData
+        //     }
+        //     catch (error) {
+        //         console.log(error)
+        //     }
 
-                    const information = `
+        // }
+        // const mapalldata = mapData()
+        // // console.log(mapalldata)
+
+        // function convertToGeoJSON(data) {
+        //     const geojson = {
+        //         type: 'FeatureCollection',
+        //         features: []
+        //     };
+
+        //     data.forEach(item => {
+        //         let Time = item.Jam
+        //         let region = item.Wilayah
+        //         let magnitude = item.Magnitude
+        //         let lati = JSON.parse((item.Lintang).slice(0, 5))
+        //         let longi = JSON.parse((item.Bujur).slice(0, 5))
+        //         // localStorage.setItem(lati)
+        //         const feature = {
+        //             type: 'Feature',
+        //             geometry: {
+        //                 type: 'Point',
+        //                 coordinates: [longi, lati] // Assuming your data has latitude and longitude properties
+        //             },
+        //             properties: {
+        //                 // Add additional properties as needed
+        //                 DateTime: item.DateTime,
+        //                 date: item.Tanggal,
+        //                 time: item.Jam,
+        //                 region: item.Wilayah,
+        //                 address: item.Wilayah,
+        //                 description: item.Dirasakan,
+        //                 title: item.Dirasakan,
+        //                 magnit: magnitude,
+        //             }
+
+        //         };
+
+        //         geojson.features.push(feature);
+        //     });
+        //     const geojsonString = JSON.stringify(geojson);
+        //     // console.log(geojsonString)
+        //     const storedData = JSON.parse(geojsonString);
+        //     createFeatures(storedData)
+        //     // let i = 0;
+        //     console.log(storedData)
+        //     // localStorage.setItem(i, geojsonString)
+        //     return geojson;
+
+        // }
+
+
+        // function createFeatures(storedData) {
+
+        //     let earthquakes = L.geoJSON(storedData, {
+        //         pointToLayer: function (feature, latlng) {
+        //             //Define  magnitude and place for circleMarker
+        //             const magnitude = feature.properties.magnit;
+        //             const place = feature.properties.region;
+        //             const dateString = feature.properties.date;
+        //             // var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        //             const timeString = feature.properties.time;
+
+
+        //             const circleMarkerStyle = {
+        //                 radius: getMarkerRadius(magnitude),
+        //                 fillColor: getColor(magnitude),
+        //                 color: 'black',
+        //                 weight: 1,
+        //                 opacity: 1,
+        //                 fillOpacity: 0.75
+        //             };
+
+        //             const information = `
                   
-          <h4>${magnitude} Magnitude </h4><hr/> 
-          <p>${place}</p>
-          <p>${dateString} ${timeString}</p>`;
-                    const quakeMarker = L.circleMarker(latlng, circleMarkerStyle);
-                    quakeMarker.bindPopup(information);
-                    return quakeMarker;
-                }
-            });
+        //   <h4>${magnitude} Magnitude </h4><hr/> 
+        //   <p>${place}</p>
+        //   <p>${dateString} ${timeString}</p>`;
+        //             const quakeMarker = L.circleMarker(latlng, circleMarkerStyle);
+        //             quakeMarker.bindPopup(information);
+        //             return quakeMarker;
+        //         }
+        //     });
 
-            // Right Bottom Table
-            function createTables() {
-                const tableInfo = L.control({ position: 'bottomright' });
-                tableInfo.onAdd = function () {
-                    // Create a div element 
-                    const div = L.DomUtil.create('div', 'tableInfo');
-                    div.style.backgroundColor = 'white';
-                    div.style.padding = '5px';
-                    div.style.borderRadius = '5px';
-                    div.style.border = "1px solid black";
-                    div.style.opacity = '0.9';
+        //     // Right Bottom Table
+        //     function createTables() {
+        //         const tableInfo = L.control({ position: 'bottomright' });
+        //         tableInfo.onAdd = function () {
+        //             // Create a div element 
+        //             const div = L.DomUtil.create('div', 'tableInfo');
+        //             div.style.backgroundColor = 'white';
+        //             div.style.padding = '5px';
+        //             div.style.borderRadius = '5px';
+        //             div.style.border = "1px solid black";
+        //             div.style.opacity = '0.9';
 
 
-                    // Table information (colors and ranges)
-                    div.innerHTML = `
-        <div style="background-color: white; padding: 10px; border: 1px solid black;">
-          <strong>Magnitude of Earthquake</strong><br>
-          <table>
-            <tr>
-              <td><div style="width: 20px; height: 20px; background-color: #ffa07a;"></div></td>
-              <td>&lt;1</td>
-            </tr>
-            <tr>
-              <td><div style="width: 20px; height: 20px; background-color: #f08080;"></div></td>
-              <td>1-2</td>
-            </tr>
-            <tr>
-              <td><div style="width: 20px; height: 20px; background-color: #ff6347;"></div></td>
-              <td>2-4</td>
-            </tr>
-            <tr>
-              <td><div style="width: 20px; height: 20px; background-color: #ff4500;"></div></td>
-              <td>4-6</td>
-            </tr>
-            <tr>
-              <td><div style="width: 20px; height: 20px; background-color: #DD2555;"></div></td>
-              <td>6-8</td>
-            </tr>
-            <tr>
-            <td><div style="width: 20px; height: 20px; background-color: #b22222;"></div></td>
-            <td>8-10</td>
-          </tr>
+        //             // Table information (colors and ranges)
+        //             div.innerHTML = `
+        // <div style="background-color: white; padding: 10px; border: 1px solid black;">
+        //   <strong>Magnitude of Earthquake</strong><br>
+        //   <table>
+        //     <tr>
+        //       <td><div style="width: 20px; height: 20px; background-color: #ffa07a;"></div></td>
+        //       <td>&lt;1</td>
+        //     </tr>
+        //     <tr>
+        //       <td><div style="width: 20px; height: 20px; background-color: #f08080;"></div></td>
+        //       <td>1-2</td>
+        //     </tr>
+        //     <tr>
+        //       <td><div style="width: 20px; height: 20px; background-color: #ff6347;"></div></td>
+        //       <td>2-4</td>
+        //     </tr>
+        //     <tr>
+        //       <td><div style="width: 20px; height: 20px; background-color: #ff4500;"></div></td>
+        //       <td>4-6</td>
+        //     </tr>
+        //     <tr>
+        //       <td><div style="width: 20px; height: 20px; background-color: #DD2555;"></div></td>
+        //       <td>6-8</td>
+        //     </tr>
+        //     <tr>
+        //     <td><div style="width: 20px; height: 20px; background-color: #b22222;"></div></td>
+        //     <td>8-10</td>
+        //   </tr>
             
-            <tr>
-              <td><div style="width: 20px; height: 20px; background-color: #800000;"></div></td>
-              <td> &gt;10</td>
-            </tr>
-          </table>
-        </div>
-        `;
+        //     <tr>
+        //       <td><div style="width: 20px; height: 20px; background-color: #800000;"></div></td>
+        //       <td> &gt;10</td>
+        //     </tr>
+        //   </table>
+        // </div>
+        // `;
 
-                    return div;
-                };
-                tableInfo.addTo(map);
-            }
+        //             return div;
+        //         };
+        //         tableInfo.addTo(map);
+        //     }
 
-            let overlayMaps = {
-                Earthquakes: earthquakes
-            };
+        //     let overlayMaps = {
+        //         Earthquakes: earthquakes
+        //     };
 
-            L.control.layers(baseMaps, overlayMaps, {
-                collapsed: false
-            }).addTo(map);
+        //     L.control.layers(baseMaps, overlayMaps, {
+        //         collapsed: false
+        //     }).addTo(map);
 
-            earthquakes.addTo(map)
-            createTables()
+        //     earthquakes.addTo(map)
+        //     createTables()
 
-        }
+        // }
     </script>
 </body>
 
