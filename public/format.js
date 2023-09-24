@@ -1,5 +1,4 @@
 var map = L.map('map').setView([1.14949, 122.2940], 5);
-// console.log(map)
 // base layer
 let street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -16,11 +15,9 @@ let googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z=
 
 let baseMaps = {
   "Street Map": street,
-  // "Topographic Map": topo,
   "googleHybrid": googleHybrid
 };
 
-// set streetmap as default layer:
 googleHybrid.addTo(map);
 
 function getMarkerRadius(mag) {
@@ -28,7 +25,6 @@ function getMarkerRadius(mag) {
 
   return (Math.sqrt(mag) * scalingFactor);
 }
-// #F0A36B
 function getColor(mag) {
   if (mag >= 10) {
     return '#800000';
@@ -44,7 +40,6 @@ function getColor(mag) {
     return '#f08080';
   } else { return '#ffa07a' };
 }
-
 
 
 let i = 0
@@ -96,8 +91,6 @@ function createFeatures() {
       div.style.borderRadius = '5px';
       div.style.border = "1px solid black";
       div.style.opacity = '0.9';
-
-
 
 
       // Table information (colors and ranges)

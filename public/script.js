@@ -18,11 +18,6 @@ console.log(mapalldata)
 
 
 
-
-
-
-
-
 function convertToGeoJSON(data) {
     const geojson = {
         type: 'FeatureCollection',
