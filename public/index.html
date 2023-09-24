@@ -29,7 +29,7 @@
                 const fetchUrl = await fetch('/getall')
                 const datas = await fetchUrl.json();
                 var geojsonData = await datas?.gempas;
-                convertToGeoJSON(geojsonData);
+                // convertToGeoJSON(geojsonData);
                 return geojsonData
             }
             catch (error) {
