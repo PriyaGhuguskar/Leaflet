@@ -37,7 +37,7 @@ const appRoutes = require('./Routes/route')
 //         res.status(500).json({ error: `${error}An error occurred while fetching data` });
 //     }
 // })
-app.use('/', appRoutes)
+app.use('/api', appRoutes)
 
 
 
